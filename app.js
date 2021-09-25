@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
   err.status = 404;
   err.message = "Sorry! We couldn't find the page you were looking for.";
   if (err.status === 404) {
-    res.render('page-not-found', {error: err});
+    res.render('page-not-found', {error: err, title: "Page Not Found"});
   } else {
     next(err);
   }
@@ -47,7 +47,7 @@ app.use(function(err, req, res, next) {
     err.message = "Sorry! There was an unexpected error on the server.";
   }
   console.error(`${err.status}: ${err.message}`);
-  res.render('error', {error: err});
+  res.render('error', {error: err, title: "Page Not Found"});
 });
 
 module.exports = app;

@@ -1,12 +1,8 @@
-doctype html
-html
-  head
-    title Page Not Found
-    link(rel='stylesheet', href='/static/stylesheets/style.css')
+extends layout
 
-  body
-    h1 Page Not Found
-    p= error.message
-    br
-    p
-      a.button(href="/") Home
+block content
+  h1 Page Not Found
+  p= error.message
+  br
+  p
+    a.button(href="/") Home

@@ -14,6 +14,14 @@ function asyncHandler(cb){
   }
 }
 
+//404 Handler for /books specific routes
+function render404(res){
+  const err = new Error();
+  err.status = 404;
+  err.message = "Sorry! We couldn't find the page you were looking for.";
+  res.render('page-not-found', { error: err, title: "Page Not Found"} );
+}
+
 //Get home page (should always redirect to /books)
 router.get('/', asyncHandler(async (req, res, next) => {
   res.redirect('/books');
@@ -53,7 +61,7 @@ router.get('/books/:id', asyncHandler(async (req, res) => {
   if(book) {
     res.render('update-book', { book });
   } else {
-    res.sendStatus(404);
+    render404(res);
   }
 }));
 
@@ -66,7 +74,7 @@ router.post('/books/:id', asyncHandler(async (req, res) => {
       await book.update(req.body);
       res.redirect('/books/' + book.id); 
     } else {
-      res.sendStatus(404);
+      render404(res);
     }
   } catch (error) {
     if(error.name === 'SequelizeValidationError') {
@@ -86,7 +94,7 @@ router.post('/books/:id/delete', asyncHandler(async (req ,res) => {
     await book.destroy();
     res.redirect('/books');
   } else {
-    res.sendStatus(404);
+    render404(res);
   }
 }));
 

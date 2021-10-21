@@ -4,6 +4,11 @@ block content
   h1= title
   p 
     a.button(href='/books/new') Create New Book
+  p
+  form(action="/search", method='GET') 
+    label(for="search") Search 
+    input(type="text" name="search" id="search" value=search)
+    input(type="submit" value="Search Books")
   table
     thead
       tr
@@ -19,3 +24,6 @@ block content
           td= book.author 
           td= book.genre 
           td= book.year
+  if(title==="Search Results")
+    p
+      a.button(href='/books') Clear Search

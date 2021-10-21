@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const Book = require('../models').Book;
+const { Op } = require("sequelize");
 
 //Handler function to wrap each route in try...catch block
 function asyncHandler(cb){
@@ -32,6 +33,24 @@ router.get('/books', asyncHandler(async (req, res, next) => {
   const books = await Book.findAll();
   res.render('index', {books, title: "Books"});
 }));
+
+//GET search results
+router.get('/search', asyncHandler(async (req, res, next) => {
+  // figured this out with console.log(req)
+  let search = req.query.search;
+  const books = await Book.findAll({
+  //this stackoverflow https://stackoverflow.com/questions/34255792/sequelize-how-to-search-multiple-columns/34263873 lead me here https://sequelize.org/master/manual/model-querying-basics.html
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${search}%` } },
+        { author: { [Op.like]: `%${search}%` } },
+        { genre: { [Op.like]: `%${search}%` } },
+        { year: { [Op.like]: `%${search}%` } }
+      ]
+    }
+  });
+  res.render('index', { books, title: "Search Results" });
+}))
 
 
 //GET new book form

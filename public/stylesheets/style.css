@@ -92,6 +92,18 @@ input[type=text] {
   width: 300px;
 }
 
+.divider {
+  height: 2px;
+}
+
 .error {
   color: rgb(236, 15, 15);
+}
+
+.page {
+  margin: 10px;
+}
+
+.pages {
+  margin-left: 300px;
 }

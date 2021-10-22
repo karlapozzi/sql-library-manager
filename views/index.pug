@@ -2,13 +2,16 @@ extends layout
 
 block content
   h1= title
-  p 
-    a.button(href='/books/new') Create New Book
   p
+    a.button(href='/books/new') Create New Book
+
+  p.divider
   form(action="/search", method='GET') 
     label(for="search") Search 
     input(type="text" name="search" id="search" value=search)
     input(type="submit" value="Search Books")
+
+  p.divider
   table
     thead
       tr
@@ -28,10 +31,12 @@ block content
   if(books.length===0)
     p No results found
   
+  p.divider 
+
   if(pagesArray)
-    p 
+    p.pages
       each page in pagesArray
-        a.button(href=`/books/page=${page}`)=page
+        a.button.page(href=`/books/page=${page}`)=page
 
   if(title==="Search Results")
     p

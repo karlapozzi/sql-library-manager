@@ -23,15 +23,39 @@ function render404(res){
   res.render('page-not-found', { error: err, title: "Page Not Found"} );
 }
 
-//Get home page (should always redirect to /books)
+//Pagination handler
+function getPagingData(data, limit){
+  const { count: totalItems, rows: books } = data;
+  const totalPages = Math.ceil(totalItems / limit);
+  return { totalItems, books, totalPages };
+};
+
+//Get home page should redirect
 router.get('/', asyncHandler(async (req, res, next) => {
-  res.redirect('/books');
+  res.redirect('/books/page=1');
+}));
+
+//Get /books should redirect to page 1
+router.get('/books', asyncHandler(async (req, res, next) => {
+  res.redirect('/books/page=1');
 }));
 
 //GET all books
-router.get('/books', asyncHandler(async (req, res, next) => {
-  const books = await Book.findAll();
-  res.render('index', {books, title: "Books"});
+router.get('/books/page=:page', asyncHandler(async (req, res, next) => {
+  //pagination help found here https://www.bezkoder.com/node-js-sequelize-pagination-mysql/
+  const limit = 10;
+  const currentPage = req.params.page;
+  const offset = (currentPage - 1) * limit; 
+  const data = await Book.findAndCountAll()
+  const response = getPagingData(data, limit);
+  const totalPages = response.totalPages;
+  //Array help found here https://stackoverflow.com/questions/42761068/paginate-javascript-array 
+  const pagesArray = Array.from({length: totalPages}, (_, i) => i + 1)
+  const books = await Book.findAll({
+    limit: limit,
+    offset: offset
+  })
+  res.render('index', {books, pagesArray, title: "Books"});
 }));
 
 //GET search results

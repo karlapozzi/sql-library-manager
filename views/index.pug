@@ -24,9 +24,14 @@ block content
           td= book.author 
           td= book.genre 
           td= book.year
-          
+  
   if(books.length===0)
     p No results found
+  
+  if(pagesArray)
+    p 
+      each page in pagesArray
+        a.button(href=`/books/page=${page}`)=page
 
   if(title==="Search Results")
     p
